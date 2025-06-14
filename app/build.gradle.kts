@@ -3,7 +3,6 @@ import java.time.LocalDate
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
     id("kotlin-parcelize")
 }
 
@@ -73,39 +72,16 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.flexbox)
-    implementation(libs.androidx.gridlayout)
-    implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.legacy.support.v4)
-    implementation(libs.androidx.lifecycle.service)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.material)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-
-    // Room
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
 
     // Sol
     implementation(libs.sol)
 
     // Andromeda
     implementation(libs.andromeda.core)
-    implementation(libs.andromeda.fragments)
-    implementation(libs.andromeda.exceptions)
-    implementation(libs.andromeda.preferences)
-    implementation(libs.andromeda.permissions)
-    implementation(libs.andromeda.notify)
-    implementation(libs.andromeda.alerts)
-    implementation(libs.andromeda.pickers)
-    implementation(libs.andromeda.list)
     implementation(libs.andromeda.files)
-    implementation(libs.andromeda.views)
+    implementation(libs.andromeda.fragments)
     implementation(libs.andromeda.bitmaps)
 
     // Luna
