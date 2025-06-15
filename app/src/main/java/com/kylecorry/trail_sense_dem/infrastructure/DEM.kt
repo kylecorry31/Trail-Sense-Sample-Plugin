@@ -13,7 +13,7 @@ object DEM {
 
     // Cache
     private var cache = LRUCache<Coordinate, Distance>(size = 5)
-    private val resolution = (1 / 240.0) / 2
+    private val resolution = (1 / 240.0) / 4
 
     // Image data source
     @Suppress("TYPE_INTERSECTION_AS_REIFIED_WARNING")
