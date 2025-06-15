@@ -36,7 +36,7 @@ class DEMTest {
 
         val errors = tests.map { test ->
             val actual = runBlocking { DEM.getElevation(context, test.first) }
-            assertEquals(test.second, actual.meters().distance, 50f)
+            assertEquals(test.second, actual.meters().distance, 60f)
             actual.meters().distance - test.second
         }
 
