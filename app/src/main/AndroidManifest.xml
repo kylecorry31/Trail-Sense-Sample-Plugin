@@ -21,7 +21,7 @@
         </activity>
 
         <service
-            android:name=".service.DEMServiceImpl"
+            android:name=".service.DigitalElevationModelService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
