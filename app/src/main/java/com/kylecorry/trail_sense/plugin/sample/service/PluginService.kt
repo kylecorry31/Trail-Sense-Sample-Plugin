@@ -2,6 +2,7 @@ package com.kylecorry.trail_sense.plugin.sample.service
 
 import android.app.Service
 import android.content.Intent
+import android.os.Binder
 import android.os.IBinder
 import android.os.IInterface
 import android.util.Log

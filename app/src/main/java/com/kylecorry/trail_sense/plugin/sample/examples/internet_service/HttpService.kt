@@ -1,4 +1,4 @@
-package com.kylecorry.trail_sense.plugin.sample.infrastructure.api
+package com.kylecorry.trail_sense.plugin.sample.examples.internet_service
 
 import com.kylecorry.luna.coroutines.onIO
 import java.net.URL

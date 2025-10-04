@@ -23,7 +23,7 @@
         </activity>
         
         <service
-            android:name=".service.SampleOnePluginService"
+            android:name=".examples.internet_service.SampleOnePluginService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
