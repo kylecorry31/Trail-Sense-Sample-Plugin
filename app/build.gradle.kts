@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
-        applicationId = "com.kylecorry.trail_sense_dem"
+        applicationId = "com.kylecorry.trail_sense.plugin.sample"
         minSdk = 23
         targetSdk = 36
         versionCode = 1
@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.andromeda.files)
     implementation(libs.andromeda.fragments)
     implementation(libs.andromeda.bitmaps)
+    implementation(libs.andromeda.json)
 
     // Luna
     implementation(libs.luna)
