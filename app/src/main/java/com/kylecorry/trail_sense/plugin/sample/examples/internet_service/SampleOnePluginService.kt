@@ -2,6 +2,7 @@ package com.kylecorry.trail_sense.plugin.sample.examples.internet_service
 
 import com.kylecorry.andromeda.core.system.Package
 import com.kylecorry.andromeda.json.JsonConvert
+import com.kylecorry.sol.math.SolMath.roundPlaces
 import com.kylecorry.sol.units.Coordinate
 import com.kylecorry.trail_sense.plugin.sample.aidl.ISampleOnePluginService
 import com.kylecorry.trail_sense.plugin.sample.permissions.getSelfSignatureSha256Fingerprints
@@ -26,7 +27,14 @@ class SampleOnePluginService : PluginService<ISampleOnePluginService>("SampleOne
 
                 val proxy = OpenMeteoProxy(this@SampleOnePluginService)
                 val weather =
-                    runBlocking { proxy.getWeather(Coordinate(latitude, longitude)) } ?: return null
+                    runBlocking {
+                        proxy.getWeather(
+                            Coordinate(
+                                latitude.roundPlaces(2),
+                                longitude.roundPlaces(2)
+                            )
+                        )
+                    } ?: return null
                 return JsonConvert.toJson(weather)
             }
         }
