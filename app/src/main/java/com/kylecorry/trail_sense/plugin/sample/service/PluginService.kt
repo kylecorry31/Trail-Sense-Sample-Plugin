@@ -11,9 +11,11 @@ abstract class PluginService<T : IInterface>(protected val serviceName: String) 
 
     abstract fun getBinder(): T
 
+    private val binder = getBinder().asBinder()
+
     override fun onBind(intent: Intent?): IBinder {
         Log.d(serviceName, "Service bound")
-        return getBinder().asBinder()
+        return binder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
