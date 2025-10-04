@@ -1,10 +1,10 @@
-package com.kylecorry.trail_sense_dem
+package com.kylecorry.trail_sense.plugin.sample
 
 import androidx.test.platform.app.InstrumentationRegistry
 import com.kylecorry.sol.math.statistics.Statistics
 import com.kylecorry.sol.units.Coordinate
-import com.kylecorry.trail_sense_dem.infrastructure.DEM
-import junit.framework.TestCase.assertEquals
+import com.kylecorry.trail_sense.plugin.sample.infrastructure.DEM
+import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.math.absoluteValue
@@ -36,7 +36,7 @@ class DEMTest {
 
         val errors = tests.map { test ->
             val actual = runBlocking { DEM.getElevation(context, test.first) }
-            assertEquals(test.second, actual.meters().distance, 60f)
+            TestCase.assertEquals(test.second, actual.meters().distance, 60f)
             actual.meters().distance - test.second
         }
 
@@ -46,8 +46,8 @@ class DEMTest {
         println("50% quantile: $quantile50")
         println("90% quantile: $quantile90")
 
-        assertEquals(0f, quantile50, 15f)
-        assertEquals(0f, quantile90, 30f)
+        TestCase.assertEquals(0f, quantile50, 15f)
+        TestCase.assertEquals(0f, quantile90, 30f)
     }
 
 }

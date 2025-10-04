@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kylecorry.trail_sense_dem"
+    namespace = "com.kylecorry.trail_sense.plugin.sample"
     compileSdk = 36
 
     defaultConfig {

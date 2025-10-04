@@ -1,4 +1,4 @@
-package com.kylecorry.trail_sense_dem.infrastructure
+package com.kylecorry.trail_sense.plugin.sample.infrastructure
 
 import android.content.Context
 import android.util.Size
