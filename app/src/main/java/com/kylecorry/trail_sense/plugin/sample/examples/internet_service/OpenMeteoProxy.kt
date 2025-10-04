@@ -1,4 +1,4 @@
-package com.kylecorry.trail_sense.plugin.sample.infrastructure.api
+package com.kylecorry.trail_sense.plugin.sample.examples.internet_service
 
 import android.content.Context
 import android.net.Uri
@@ -12,9 +12,6 @@ import com.kylecorry.sol.units.DistanceUnits
 import com.kylecorry.sol.units.Speed
 import com.kylecorry.sol.units.Temperature
 import com.kylecorry.sol.units.TimeUnits
-import com.kylecorry.trail_sense.plugin.sample.domain.DailyWeather
-import com.kylecorry.trail_sense.plugin.sample.domain.Forecast
-import com.kylecorry.trail_sense.plugin.sample.domain.HourlyWeather
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
