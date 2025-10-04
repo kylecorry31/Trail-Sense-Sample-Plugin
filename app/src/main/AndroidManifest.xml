@@ -21,13 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        
         <service
-            android:name=".service.DigitalElevationModelService"
+            android:name=".service.SampleOnePluginService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.kylecorry.trail_sense_dem.DEM_SERVICE" />
+                <action android:name="com.kylecorry.trail_sense.plugin.sample.SAMPLE_ONE_SERVICE" />
             </intent-filter>
         </service>
     </application>
