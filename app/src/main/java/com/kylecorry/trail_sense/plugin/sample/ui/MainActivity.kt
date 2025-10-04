@@ -1,5 +1,6 @@
 package com.kylecorry.trail_sense.plugin.sample.ui
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
@@ -13,11 +14,17 @@ import com.kylecorry.trail_sense.plugin.sample.R
 
 class MainActivity : AndromedaActivity() {
 
+    private val permissions = mutableListOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setColorTheme(ColorTheme.System, true)
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
+
+        requestPermissions(permissions) {}
 
         setContentView(R.layout.activity_main)
 
