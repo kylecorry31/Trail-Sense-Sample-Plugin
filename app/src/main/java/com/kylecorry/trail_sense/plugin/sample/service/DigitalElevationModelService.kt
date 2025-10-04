@@ -1,12 +1,12 @@
-package com.kylecorry.trail_sense_dem.service
+package com.kylecorry.trail_sense.plugin.sample.service
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.kylecorry.sol.units.Coordinate
-import com.kylecorry.trail_sense_dem.aidl.IDigitalElevationModelService
-import com.kylecorry.trail_sense_dem.infrastructure.DEM
+import com.kylecorry.trail_sense.plugin.sample.aidl.IDigitalElevationModelService
+import com.kylecorry.trail_sense.plugin.sample.infrastructure.DEM
 import kotlinx.coroutines.runBlocking
 
 class DigitalElevationModelService : Service() {

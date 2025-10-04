@@ -1,5 +1,5 @@
 // IDigitalElevationModelService.aidl
-package com.kylecorry.trail_sense_dem.aidl;
+package com.kylecorry.trail_sense.plugin.sample.aidl;
 
 interface IDigitalElevationModelService {
     /**

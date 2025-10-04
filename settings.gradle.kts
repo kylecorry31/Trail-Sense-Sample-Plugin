@@ -27,4 +27,4 @@ dependencyResolutionManagement {
 }
 
 include(":app")
-rootProject.name = "Trail Sense DEM"
+rootProject.name = "Trail Sense Sample Plugin"

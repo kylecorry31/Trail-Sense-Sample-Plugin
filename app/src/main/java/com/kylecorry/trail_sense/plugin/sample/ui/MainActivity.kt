@@ -1,4 +1,4 @@
-package com.kylecorry.trail_sense_dem.ui
+package com.kylecorry.trail_sense.plugin.sample.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import com.kylecorry.andromeda.fragments.AndromedaActivity
 import com.kylecorry.andromeda.fragments.ColorTheme
-import com.kylecorry.trail_sense_dem.R
+import com.kylecorry.trail_sense.plugin.sample.R
 
 class MainActivity : AndromedaActivity() {
 

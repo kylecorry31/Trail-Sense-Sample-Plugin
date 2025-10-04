@@ -94,3 +94,4 @@ lint/tmp/
 
 
 build-cache/
+/.idea/copilot*
