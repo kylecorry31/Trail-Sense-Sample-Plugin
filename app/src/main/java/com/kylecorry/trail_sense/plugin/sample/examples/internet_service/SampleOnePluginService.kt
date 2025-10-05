@@ -1,31 +1,27 @@
 package com.kylecorry.trail_sense.plugin.sample.examples.internet_service
 
-import com.kylecorry.andromeda.core.system.Package
 import com.kylecorry.andromeda.json.JsonConvert
 import com.kylecorry.sol.math.SolMath.roundPlaces
 import com.kylecorry.sol.units.Coordinate
 import com.kylecorry.trail_sense.plugin.sample.aidl.ISampleOnePluginService
-import com.kylecorry.trail_sense.plugin.sample.permissions.getSelfSignatureSha256Fingerprints
-import com.kylecorry.trail_sense.plugin.sample.permissions.requireCallerSignature
+import com.kylecorry.trail_sense.plugin.sample.service.PluginPermissions
 import com.kylecorry.trail_sense.plugin.sample.service.PluginService
 import kotlinx.coroutines.runBlocking
 
 class SampleOnePluginService : PluginService<ISampleOnePluginService>("SampleOnePluginService") {
     override fun getBinder(): ISampleOnePluginService {
+        val context = this
         return object : ISampleOnePluginService.Stub() {
             override fun getWeather(
                 latitude: Double,
                 longitude: Double
             ): String? {
                 // TODO: This is where permissions would be enforced (likely not needed since the intent of the plugins is to expand the abilities of Trail Sense)
-//                requireCallerPermission(this@SampleOnePluginService, Manifest.permission.INTERNET)
+//                PluginPermissions.enforcePermissions(context, Manifest.permission.INTERNET)
                 // TODO: This is where the signatures of the release APKs would be added
-                requireCallerSignature(
-                    this@SampleOnePluginService,
-                    Package.getSelfSignatureSha256Fingerprints(this@SampleOnePluginService)
-                )
+                PluginPermissions.enforceSignature(context)
 
-                val proxy = OpenMeteoProxy(this@SampleOnePluginService)
+                val proxy = OpenMeteoProxy(context)
                 val weather =
                     runBlocking {
                         proxy.getWeather(
