@@ -84,6 +84,7 @@ dependencies {
     implementation(libs.andromeda.fragments)
     implementation(libs.andromeda.bitmaps)
     implementation(libs.andromeda.json)
+    implementation(libs.andromeda.permissions)
 
     // Luna
     implementation(libs.luna)
