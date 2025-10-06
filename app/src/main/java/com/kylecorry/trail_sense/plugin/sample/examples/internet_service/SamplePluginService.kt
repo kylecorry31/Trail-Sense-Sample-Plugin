@@ -23,6 +23,15 @@ class SamplePluginService : IpcService() {
                 PluginPermissions.enforceSignature(context)
                 "Pong".toByteArray()
             },
+            "/registration" to { context, payload ->
+                // No signature check required
+                JsonConvert.toJson(
+                    RegistrationResponse(
+                        "Sample",
+                        weather = listOf("/weather")
+                    )
+                ).toByteArray()
+            },
             "/weather" to { context, payload ->
                 PluginPermissions.enforceSignature(context)
                 getWeather(context, payload)
