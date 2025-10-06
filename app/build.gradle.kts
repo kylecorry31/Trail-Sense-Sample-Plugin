@@ -25,7 +25,6 @@ android {
     }
     buildFeatures {
         buildConfig = true
-        aidl = true
     }
     buildTypes {
         getByName("release") {
