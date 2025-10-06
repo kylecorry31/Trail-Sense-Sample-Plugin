@@ -24,11 +24,11 @@
         </activity>
 
         <service
-            android:name=".examples.internet_service.SampleOnePluginService"
+            android:name=".examples.internet_service.SamplePluginService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.kylecorry.trail_sense.plugin.sample.SAMPLE_ONE_SERVICE" />
+                <action android:name="com.kylecorry.trail_sense.PLUGIN_SERVICE" />
             </intent-filter>
         </service>
     </application>
