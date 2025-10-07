@@ -1,6 +1,7 @@
 package com.kylecorry.trail_sense.plugin.sample.examples.internet_service
 
 import android.content.Context
+import com.kylecorry.andromeda.core.system.Package
 import com.kylecorry.andromeda.json.JsonConvert
 import com.kylecorry.sol.units.Coordinate
 import com.kylecorry.trail_sense.plugin.sample.service.IpcService
@@ -28,7 +29,10 @@ class SamplePluginService : IpcService() {
                 JsonConvert.toJson(
                     RegistrationResponse(
                         "Sample",
-                        weather = listOf("/weather")
+                        Package.getVersionName(context),
+                        RegistrationFeaturesResponse(
+                            weather = listOf("/weather")
+                        )
                     )
                 ).toByteArray()
             },
