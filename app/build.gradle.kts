@@ -81,7 +81,7 @@ dependencies {
     implementation(libs.andromeda.core)
     implementation(libs.andromeda.files)
     implementation(libs.andromeda.fragments)
-    implementation(libs.andromeda.bitmaps)
+    implementation(libs.andromeda.ipc)
     implementation(libs.andromeda.json)
     implementation(libs.andromeda.permissions)
 
