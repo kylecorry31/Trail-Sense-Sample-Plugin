@@ -6,6 +6,14 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.time.Duration
 
+enum class HttpMethod {
+    GET,
+    POST,
+    PUT,
+    DELETE,
+    PATCH
+}
+
 class HttpResponse(
     val code: Int,
     val headers: Map<String, List<String>>,
@@ -25,7 +33,7 @@ class HttpClient {
 
     suspend fun send(
         url: String,
-        method: String = "GET",
+        method: HttpMethod = HttpMethod.GET,
         body: ByteArray? = null,
         headers: Map<String, List<String>> = emptyMap(),
         readTimeout: Duration? = null,
@@ -42,7 +50,7 @@ class HttpClient {
         for ((key, value) in headers) {
             connection.setRequestProperty(key, value.joinToString(","))
         }
-        connection.requestMethod = method
+        connection.requestMethod = method.name
         if (body != null) {
             connection.doOutput = true
             connection.outputStream.use {
