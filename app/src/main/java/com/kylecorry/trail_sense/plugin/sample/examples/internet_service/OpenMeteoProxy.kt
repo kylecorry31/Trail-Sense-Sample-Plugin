@@ -6,48 +6,31 @@ import android.util.Log
 import com.kylecorry.andromeda.files.CacheFileSystem
 import com.kylecorry.andromeda.json.JsonConvert
 import com.kylecorry.luna.coroutines.onIO
+import com.kylecorry.sol.science.meteorology.WeatherCondition
 import com.kylecorry.sol.units.Coordinate
 import com.kylecorry.sol.units.Distance
-import com.kylecorry.sol.units.DistanceUnits
-import com.kylecorry.sol.units.Speed
-import com.kylecorry.sol.units.Temperature
-import com.kylecorry.sol.units.TimeUnits
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZonedDateTime
 
 class CurrentWeatherDto(
     val time: String,
     val temperature_2m: Float,
     val relative_humidity_2m: Float,
-    val apparent_temperature: Float,
-    val precipitation: Float,
-    val rain: Float,
-    val showers: Float,
-    val snowfall: Float,
     val weather_code: Int,
-    val cloud_cover: Float,
     val wind_speed_10m: Float,
-    val wind_gusts_10m: Float
 )
 
 class HourlyWeatherDto(
     val time: List<String>,
     val temperature_2m: List<Float>,
-    val apparent_temperature: List<Float>,
     val relative_humidity_2m: List<Float>,
     val precipitation_probability: List<Float>,
-    val precipitation: List<Float>,
     val rain: List<Float>,
     val showers: List<Float>,
     val snowfall: List<Float>,
-    val snow_depth: List<Float>,
     val weather_code: List<Int>,
-    val cloud_cover: List<Float>,
-    val visibility: List<Float>,
-    val wind_speed_10m: List<Float>,
-    val wind_gusts_10m: List<Float>
+    val wind_speed_10m: List<Float>
 )
 
 class DailyWeatherDto(
@@ -55,19 +38,16 @@ class DailyWeatherDto(
     val weather_code: List<Int>,
     val temperature_2m_max: List<Float>,
     val temperature_2m_min: List<Float>,
-    val uv_index_max: List<Float>,
+    val precipitation_probability_max: List<Float>,
     val snowfall_sum: List<Float>,
     val showers_sum: List<Float>,
-    val rain_sum: List<Float>,
-    val wind_speed_10m_max: List<Float>,
-    val wind_gusts_10m_max: List<Float>
+    val rain_sum: List<Float>
 )
 
 class ForecastDto(
     val latitude: Double,
     val longitude: Double,
-    val generationtime_ms: Double,
-    val timezone: String,
+    val elevation: Double?,
     val utc_offset_seconds: Long,
     val current: CurrentWeatherDto,
     val hourly: HourlyWeatherDto,
@@ -89,15 +69,15 @@ class OpenMeteoProxy(context: Context) {
             .appendQueryParameter("longitude", location.longitude.toString())
             .appendQueryParameter(
                 "daily",
-                "weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,snowfall_sum,showers_sum,rain_sum,wind_speed_10m_max,wind_gusts_10m_max"
+                "weather_code,temperature_2m_max,temperature_2m_min,snowfall_sum,showers_sum,rain_sum,precipitation_probability_max"
             )
             .appendQueryParameter(
                 "hourly",
-                "temperature_2m,apparent_temperature,relative_humidity_2m,precipitation_probability,precipitation,weather_code,cloud_cover,visibility,wind_speed_10m,wind_gusts_10m,rain,showers,snowfall,snow_depth"
+                "temperature_2m,relative_humidity_2m,precipitation_probability,weather_code,wind_speed_10m,rain,showers,snowfall"
             )
             .appendQueryParameter(
                 "current",
-                "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_gusts_10m"
+                "temperature_2m,relative_humidity_2m,rain,showers,snowfall,weather_code,wind_speed_10m"
             )
             .appendQueryParameter("timezone", "auto")
             .build()
@@ -139,88 +119,57 @@ class OpenMeteoProxy(context: Context) {
         JsonConvert.fromJson<ForecastDto>(data)
     }
 
-    suspend fun getWeather(location: Coordinate): Forecast? = onIO {
+    suspend fun getWeather(location: Coordinate): TrailSenseForecast? = onIO {
         val forecast = getForecast(location) ?: return@onIO null
-        Forecast(
-            HourlyWeather(
-                time = Instant.parse(forecast.current.time + ":00.000Z")
-                    .minusSeconds(forecast.utc_offset_seconds),
-                temperature = Temperature.celsius(forecast.current.temperature_2m),
-                feelsLikeTemperature = Temperature.celsius(forecast.current.apparent_temperature),
+        val currentTime = Instant.parse("${forecast.current.time}:00.000Z")
+            .minusSeconds(forecast.utc_offset_seconds)
+        TrailSenseForecast(
+            currentTime,
+            forecast.elevation?.toFloat(),
+            TrailSenseCurrentWeather(
+                time = currentTime,
+                temperature = forecast.current.temperature_2m,
                 humidity = forecast.current.relative_humidity_2m / 100f,
-                precipitationProbability = 0f, // TODO: Get this from the closest hourly
-                precipitation = Distance.meters(forecast.current.precipitation),
-                rain = Distance.meters(forecast.current.rain),
-                showers = Distance.meters(forecast.current.showers),
-                snow = Distance.meters(forecast.current.snowfall),
-                snowDepth = Distance.meters(0f), // Not available in current
-                weatherCode = forecast.current.weather_code,
-                cloudCover = forecast.current.cloud_cover / 100f,
-                visibility = Distance.kilometers(forecast.hourly.visibility[0]), // Use first hourly visibility
-                windSpeed = Speed.from(
-                    forecast.current.wind_speed_10m,
-                    DistanceUnits.Kilometers,
-                    TimeUnits.Hours
-                ),
-                windGusts = Speed.from(
-                    forecast.current.wind_gusts_10m,
-                    DistanceUnits.Kilometers,
-                    TimeUnits.Hours
-                ),
-                uvIndex = 0f // TODO
+                weather = mapWeatherCode(forecast.current.weather_code),
+                windSpeed = forecast.current.wind_speed_10m,
             ),
             forecast.hourly.time.mapIndexed { index, time ->
-                HourlyWeather(
-                    time = Instant.parse(time + ":00.000Z")
+                TrailSenseHourlyWeather(
+                    time = Instant.parse("$time:00.000Z")
                         .minusSeconds(forecast.utc_offset_seconds),
-                    temperature = Temperature.celsius(forecast.hourly.temperature_2m[index]),
-                    feelsLikeTemperature = Temperature.celsius(forecast.hourly.apparent_temperature[index]),
+                    temperature = forecast.hourly.temperature_2m[index],
                     humidity = forecast.hourly.relative_humidity_2m[index] / 100f,
-                    precipitationProbability = forecast.hourly.precipitation_probability[index] / 100f,
-                    precipitation = Distance.meters(forecast.hourly.precipitation[index]),
-                    rain = Distance.meters(forecast.hourly.rain[index]),
-                    showers = Distance.meters(forecast.hourly.showers[index]),
-                    snow = Distance.meters(forecast.hourly.snowfall[index]),
-                    snowDepth = Distance.meters(forecast.hourly.snow_depth[index]),
-                    weatherCode = forecast.hourly.weather_code[index],
-                    cloudCover = forecast.hourly.cloud_cover[index] / 100f,
-                    visibility = Distance.kilometers(forecast.hourly.visibility[index]),
-                    windSpeed = Speed.from(
-                        forecast.hourly.wind_speed_10m[index],
-                        DistanceUnits.Kilometers,
-                        TimeUnits.Hours
-                    ),
-                    windGusts = Speed.from(
-                        forecast.hourly.wind_gusts_10m[index],
-                        DistanceUnits.Kilometers,
-                        TimeUnits.Hours
-                    ),
-                    uvIndex = 0f // TODO
+                    precipitationChance = forecast.hourly.precipitation_probability[index] / 100f,
+                    rainAmount = forecast.hourly.rain[index] + forecast.hourly.showers[index],
+                    snowAmount = forecast.hourly.snowfall[index],
+                    weather = mapWeatherCode(forecast.hourly.weather_code[index]),
+                    windSpeed = forecast.hourly.wind_speed_10m[index]
                 )
-            }.filter {
-                it.time >= ZonedDateTime.now().withMinute(0).withSecond(0).withNano(0).toInstant()
             }.sortedBy { it.time },
             forecast.daily.time.mapIndexed { index, time ->
-                DailyWeather(
+                TrailSenseDailyWeather(
                     date = LocalDate.parse(time),
-                    weatherCode = forecast.daily.weather_code[index],
-                    maxTemperature = Temperature.celsius(forecast.daily.temperature_2m_max[index]),
-                    minTemperature = Temperature.celsius(forecast.daily.temperature_2m_min[index]),
-                    maxWindSpeed = Speed.from(
-                        forecast.daily.wind_speed_10m_max[index], DistanceUnits.Kilometers,
-                        TimeUnits.Hours
-                    ),
-                    maxWindGusts = Speed.from(
-                        forecast.daily.wind_gusts_10m_max[index], DistanceUnits.Kilometers,
-                        TimeUnits.Hours
-                    ),
-                    snowfall = Distance.meters(forecast.daily.snowfall_sum[index]),
-                    showers = Distance.meters(forecast.daily.showers_sum[index]),
-                    rain = Distance.meters(forecast.daily.rain_sum[index]),
-                    uvIndex = forecast.daily.uv_index_max[index]
+                    weather = mapWeatherCode(forecast.daily.weather_code[index]),
+                    lowTemperature = forecast.daily.temperature_2m_max[index],
+                    highTemperature = forecast.daily.temperature_2m_min[index],
+                    precipitationChance = forecast.daily.precipitation_probability_max[index] / 100f,
+                    snowAmount = forecast.daily.snowfall_sum[index],
+                    rainAmount = forecast.daily.rain_sum[index] + forecast.daily.showers_sum[index]
                 )
-            }.filter { it.date.isAfter(LocalDate.now().minusDays(1)) }.sortedBy { it.date }
+            }.sortedBy { it.date }
         )
+    }
+
+    private fun mapWeatherCode(code: Int): WeatherCondition? {
+        return when (code) {
+            0, 1, 2 -> WeatherCondition.Clear
+            3, 45, 48 -> WeatherCondition.Overcast
+            51, 53, 55, 61, 63, 65, 80, 81, 82 -> WeatherCondition.Rain
+            56, 57, 66, 67 -> WeatherCondition.Precipitation
+            71, 73, 75, 77, 85, 86 -> WeatherCondition.Snow
+            95, 96, 99 -> WeatherCondition.Thunderstorm
+            else -> null
+        }
     }
 
 }
