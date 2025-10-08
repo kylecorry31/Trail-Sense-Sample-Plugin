@@ -11,7 +11,7 @@ import com.kylecorry.trail_sense.plugin.sample.service.success
 
 class SamplePluginService : InterprocessCommunicationService() {
 
-    private suspend fun getWeather(context: Context, payload: ByteArray?): Forecast? {
+    private suspend fun getWeather(context: Context, payload: ByteArray?): TrailSenseForecast? {
         val payloadJson = payload?.toString(Charsets.UTF_8) ?: return null
         val parsed = JsonConvert.fromJson<WeatherRequest>(payloadJson) ?: return null
         val proxy = OpenMeteoProxy(context)
