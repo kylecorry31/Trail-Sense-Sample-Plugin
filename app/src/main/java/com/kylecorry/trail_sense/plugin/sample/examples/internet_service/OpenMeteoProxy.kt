@@ -57,7 +57,7 @@ class ForecastDto(
 class OpenMeteoProxy(context: Context) {
 
     private val cache = CacheFileSystem(context)
-    private val http = HttpService()
+    private val http = HttpClient()
 
     private fun getUrl(location: Coordinate): String {
         val url = Uri.Builder()
@@ -114,7 +114,7 @@ class OpenMeteoProxy(context: Context) {
         }
 
         val url = getUrl(location)
-        val data = http.get(url)
+        val data = http.send(url).content?.toString(Charsets.UTF_8) ?: return@onIO null
         cache.getFile("weather.json").writeText(data)
         JsonConvert.fromJson<ForecastDto>(data)
     }
