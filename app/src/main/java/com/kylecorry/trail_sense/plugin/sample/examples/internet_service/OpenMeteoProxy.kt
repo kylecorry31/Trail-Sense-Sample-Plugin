@@ -126,6 +126,7 @@ class OpenMeteoProxy(context: Context) {
         TrailSenseForecast(
             currentTime,
             forecast.elevation?.toFloat(),
+            "[Weather data by Open-Meteo.com](https://open-meteo.com/)",
             TrailSenseCurrentWeather(
                 time = currentTime,
                 temperature = forecast.current.temperature_2m,

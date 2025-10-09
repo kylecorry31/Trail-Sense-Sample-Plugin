@@ -8,6 +8,7 @@ import java.time.LocalDate
 data class TrailSenseForecast(
     val time: Instant,
     val elevation: Float?,
+    val citation: String?,
     val current: TrailSenseCurrentWeather,
     val hourly: List<TrailSenseHourlyWeather>,
     val daily: List<TrailSenseDailyWeather>
