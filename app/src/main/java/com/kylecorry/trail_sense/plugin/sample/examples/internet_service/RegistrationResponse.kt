@@ -20,7 +20,6 @@ data class RegistrationMapLayerResponse(
     val isTimeDependent: Boolean = false,
     val refreshInterval: Long? = null,
     val refreshBroadcasts: List<String> = emptyList(),
-    val cacheKeys: List<String>? = null,
     val shouldMultiply: Boolean = false
 )
 
