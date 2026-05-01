@@ -15,7 +15,8 @@ import com.kylecorry.trail_sense.plugin.sample.R
 class MainActivity : AndromedaActivity() {
 
     private val permissions = mutableListOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
