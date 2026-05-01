@@ -69,10 +69,6 @@ class SamplePluginService : InterprocessCommunicationService() {
     override val router: InterprocessCommunicationRouter
         get() = InterprocessCommunicationRouter(
             mapOf(
-                "/ping" to { context, payload ->
-                    PluginPermissions.enforceSignature(context)
-                    success("Pong")
-                },
                 "/registration" to { context, payload ->
                     // No signature check required
                     success(
