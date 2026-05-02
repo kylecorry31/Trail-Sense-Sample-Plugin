@@ -91,16 +91,16 @@ class SamplePluginService : InterprocessCommunicationService() {
                         )
                     )
                 },
-                "/weather" to { context, payload ->
+                "/weather" to { context, request ->
                     PluginPermissions.enforceSignature(context)
-                    success(getWeather(context, payload))
+                    success(getWeather(context, request.payload))
                 },
-                "/geojson" to { context, payload ->
-                    val parsedPayload = payload?.fromJson<FeatureLayerPayload>()
+                "/geojson" to { context, request ->
+                    val parsedPayload = request.payload?.fromJson<FeatureLayerPayload>()
                     parsedPayload?.let { success(getGeoJson(it)) } ?: badRequest()
                 },
-                "/tiles" to { context, payload ->
-                    val parsedPayload = payload?.fromJson<TileLayerPayload>()
+                "/tiles" to { context, request ->
+                    val parsedPayload = request.payload?.fromJson<TileLayerPayload>()
                     parsedPayload?.let { success(getTile(it)) } ?: badRequest()
                 }
             )

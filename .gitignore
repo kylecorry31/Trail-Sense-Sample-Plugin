@@ -95,3 +95,5 @@ lint/tmp/
 
 build-cache/
 /.idea/copilot*
+/.idea/planningMode.xml
+/.idea/studiobot.xml

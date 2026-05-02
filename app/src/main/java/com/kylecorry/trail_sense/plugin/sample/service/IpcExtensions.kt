@@ -1,5 +1,6 @@
 package com.kylecorry.trail_sense.plugin.sample.service
 
+import android.os.Bundle
 import com.kylecorry.andromeda.ipc.CODE_BAD_REQUEST
 import com.kylecorry.andromeda.ipc.CODE_OK
 import com.kylecorry.andromeda.ipc.InterprocessCommunicationResponse
@@ -23,9 +24,9 @@ fun success(payload: Any?): InterprocessCommunicationResponse {
             payload.toJsonBytes()
         }
     }
-    return InterprocessCommunicationResponse(CODE_OK, bytes)
+    return InterprocessCommunicationResponse(CODE_OK, Bundle(), bytes)
 }
 
 fun badRequest(): InterprocessCommunicationResponse {
-    return InterprocessCommunicationResponse(CODE_BAD_REQUEST, null)
+    return InterprocessCommunicationResponse(CODE_BAD_REQUEST, Bundle(), null)
 }
