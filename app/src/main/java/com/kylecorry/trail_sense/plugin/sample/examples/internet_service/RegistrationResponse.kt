@@ -19,7 +19,6 @@ data class RegistrationMapLayerResponse(
     val minZoomLevel: Int? = null,
     val isTimeDependent: Boolean = false,
     val refreshInterval: Long? = null,
-    val refreshBroadcasts: List<String> = emptyList(),
     val shouldMultiply: Boolean = false
 )
 
