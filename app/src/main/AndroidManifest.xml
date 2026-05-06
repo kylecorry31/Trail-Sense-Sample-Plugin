@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!--  Trail Sense requires that map layer plugins have the ACCESS_FINE_LOCATION permission   -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -24,8 +24,9 @@
             </intent-filter>
         </activity>
 
+        <!-- This is the service Trail Sense binds to. Make sure it can respond to /registration messages. -->
         <service
-            android:name=".examples.internet_service.SamplePluginService"
+            android:name=".service.SamplePluginService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
